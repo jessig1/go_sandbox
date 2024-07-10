@@ -1,11 +1,13 @@
 // packages act as namespaces...need 1 per project, but can have multiple...main is entry point to app
-//package main
+package main
 
 // imports external libraries
-import "fmt"
+import (
+	"fmt"
+)
 
 // needs to be called main (only 1 per project) for program startup
-//func main() {
+func main() {
 	fmt.Print("Hello world!")
 }
 
