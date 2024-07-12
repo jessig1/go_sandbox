@@ -1,39 +1,31 @@
 package main
 
 import (
+	//imports from fileops package we created
+	"examplecom/bank/fileops"
 	"fmt"
-	"os"
-	"strconv"
+
+	"github.com/Pallinder/go-randomdata"
 )
 
 const accountBalanceFile = "balance.txt"
 
-func getBalance() float64 {
-	// _ placeholder for a variable
-	data, _ := os.ReadFile(accountBalanceFile)
-	balanceText := string(data)
-	// converts string to float64
-	balance, _ := strconv.ParseFloat(balanceText, 64)
-	return balance
-}
-
-func writeBalance(balance float64) {
-	balanceText := fmt.Sprint(balance)
-	// writes the balance amount to a text file, has a permission of 0644
-	os.WriteFile(accountBalanceFile, []byte(balanceText), 0644)
-}
 func main() {
-	var accountBalance = getBalance()
+	//uses GetFloat function from fileops file
+	var accountBalance, err = fileops.GetFloat(accountBalanceFile)
+
+	if err != nil {
+		fmt.Println("Error")
+		fmt.Println(err)
+		fmt.Println("-----")
+		// stops execution with error message
+		//panic("Can't continue")
+	}
 	fmt.Println("Welcome to the bank")
+	fmt.Println("reach us at ", randomdata.PhoneNumber())
 	//prevents script from ending after choice made
 	for {
-
-		fmt.Println("What do you want to do?")
-		fmt.Println("1. Check Balance")
-		fmt.Println("2. Deposit Money")
-		fmt.Println("3. Withdraw Money")
-		fmt.Println("4. Exit")
-
+		presentOptions()
 		var choice int
 		fmt.Print("Your choice: ")
 		fmt.Scan(&choice)
@@ -54,7 +46,7 @@ func main() {
 			}
 			accountBalance += depositAmount
 			fmt.Println("New balance: ", accountBalance)
-			writeBalance(accountBalance)
+			fileops.WriteFloat(accountBalance, accountBalanceFile)
 		case 3:
 			fmt.Print("Withdrawl amount: ")
 			var withdrawlAmount float64
@@ -71,7 +63,7 @@ func main() {
 			}
 			accountBalance -= withdrawlAmount
 			fmt.Println("New Balance: ", accountBalance)
-			writeBalance(accountBalance)
+			fileops.WriteFloat(accountBalance, accountBalanceFile)
 		default:
 			fmt.Println("Goodbye")
 			fmt.Println("thank you for using the bank")
@@ -122,3 +114,5 @@ func main() {
 	//break in if statement
 	//fmt.Println("Thanks for choosing the bank")
 }
+
+//go get installs dependent packages, can also specify path to library for new package
