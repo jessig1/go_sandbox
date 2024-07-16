@@ -22,7 +22,7 @@ type Admin struct {
 }
 
 // receiver methord with a pointer of a struct
-func (u User) OutputUserDetails() {
+func (u *User) OutputUserDetails() {
 	fmt.Println(u.firstName, u.lastName, u.birthdate, u.birthdate)
 }
 
@@ -46,7 +46,7 @@ func NewAdmin(email, password string) Admin {
 }
 func New(firstName, lastName, birthdate string) (*User, error) {
 	if firstName == "" || lastName == "" || birthdate == "" {
-		return nil, errors.New("Please enter required info")
+		return nil, errors.New("please enter required info")
 	}
 	return &User{
 		firstName: firstName,

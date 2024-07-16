@@ -30,7 +30,9 @@ func main() {
 	admin := user.NewAdmin("test@example.com", "password123")
 	admin.User.OutputUserDetails()
 	admin.User.ClearUserName()
+	admin.User.OutputUserDetails()
 	// outputUserDetails(&appUser)
+	// annonymous embedding of struct vs. defining a user above
 	appUser.OutputUserDetails()
 	appUser.ClearUserName()
 	appUser.OutputUserDetails()
