@@ -3,42 +3,23 @@ package main
 // group data into one value
 import (
 	"fmt"
-	"time"
+
+	"example.com/structs/user"
 )
 
-type user struct {
-	firstName string
-	lastName  string
-	birthdate string
-	createdAt time.Time
-}
-
-// receiver methord with a pointer of a struct
-func (u user) outputUserDetails() {
-	fmt.Println(u.firstName, u.lastName, u.birthdate, u.birthdate)
-}
-
-// mutates data in struct, use pointer to update values otherwise in this example the user data won't be updated if not targeting pointer
-func (u *user) clearUserName() {
-	u.firstName = ""
-	u.lastName = ""
-}
-
-func newUser(firstName, lastName, birthdate string) user {
-	return user{
-		firstName: firstName,
-		lastName:  lastName,
-		birthdate: birthdate,
-		createdAt: time.Now(),
-	}
-}
 func main() {
 	userFirstName := getUserData("Please enter your first name: ")
 	userLastName := getUserData("Please enter your last name: ")
 	userBirthdate := getUserData("Please enter your birthdate (MM/DD/YYYY): ")
 
-	var appUser user
+	var appUser *user.User
 
+	appUser, err := user.New(userFirstName, userLastName, userBirthdate)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	// appUser = user{
 	// 	firstName: userFirstName,
 	// 	lastName:  userLastName,
@@ -46,10 +27,13 @@ func main() {
 	// 	createdAt: time.Now(),
 	// }
 
+	admin := user.NewAdmin("test@example.com", "password123")
+	admin.User.OutputUserDetails()
+	admin.User.ClearUserName()
 	// outputUserDetails(&appUser)
-	appUser.outputUserDetails()
-	appUser.clearUserName()
-	appUser.outputUserDetails()
+	appUser.OutputUserDetails()
+	appUser.ClearUserName()
+	appUser.OutputUserDetails()
 }
 
 func getUserData(promptText string) string {
