@@ -3,24 +3,20 @@ package main
 import "fmt"
 
 func main() {
-	var productNames [4]string = [4]string{"A book"}
-	// array with 4 prices
-	prices := [4]float64{19.21, 3.24, 6.12, 23.45}
-	fmt.Println(prices)
-	// sets 3rd item in productNames
-	productNames[2] = "A movie"
-	fmt.Println(productNames[2])
+	// dynamic array with initial length with max capacity of 5
+	userNames := make([]string, 2, 5)
 
-	fmt.Println(prices[2])
+	userNames[0] = "Paul"
+	userNames = append(userNames, "Jake")
+	userNames = append(userNames, "Britt")
 
-	// slice removes first and last items
-	featurePrices := prices[1:]
-	// overrides existing 2nd item
-	featurePrices[1] = 13.34
-	highlightedPrices := featurePrices[:1]
-	highlightedPrices = highlightedPrices[:3]
+	fmt.Println(userNames)
 
-	fmt.Println(highlightedPrices)
-	fmt.Println(len(highlightedPrices), cap(highlightedPrices))
+	courseRatings := make(map[string]float64, 3)
 
+	courseRatings["go"] = 4.7
+	courseRatings["Terraform"] = 4.6
+	courseRatings["Rust"] = 4.1
+
+	fmt.Println(courseRatings)
 }
