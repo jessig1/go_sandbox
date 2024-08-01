@@ -17,9 +17,8 @@ type Event struct {
 
 var events = []Event{}
 
-func (e Event) Save() error {
-	query := `
-	INSERT INTO events(name, description, location, dateTime, user_id) 
+func (e *Event) Save() error {
+	query := `INSERT INTO events(name, description, location, dateTime, user_id) 
 	VALUES (?, ?, ?, ?, ?)`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
@@ -58,4 +57,50 @@ func GetAllEvents() ([]Event, error) {
 	}
 
 	return events, nil
+}
+
+func GetEventByID(id int64) (*Event, error) {
+	query := "SELECT * FROM events WHERE id = ?"
+	// only looks for one row that matches id
+	row := db.DB.QueryRow(query, id)
+
+	var event Event
+	err := row.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &event, nil
+}
+
+func (event Event) Update() error {
+	query := `
+	UPDATE events
+	SET name = ?, description =?, location = ?, dateTime = ?
+	WHERE id = ?
+	`
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.Name, event.Description, event.Location, event.DateTime, event.ID)
+	return err
+}
+
+func (event Event) Delete() error {
+	query := "DELETE FROM events WHERE id = ?"
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.ID)
+	return err
 }
